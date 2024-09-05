@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import SessionWrapper from "@/components/SessionWrapper";
+import Header from "@/components/header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +21,7 @@ export default function RootLayout({
     <SessionWrapper>
       <html lang="pt-br">
         <body className={cn("font-sans antialiased", inter.className)}>
+          <Header />
           {children}
         </body>
       </html>
