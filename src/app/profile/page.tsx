@@ -1,5 +1,13 @@
-const Profile = () => {
-  return <h1>Meu perfil</h1>;
-};
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
-export default Profile;
+export default async function Favorites() {
+  const session = await getServerSession(authOptions);
+
+  if (session) {
+    return <h1>Meu perfil</h1>;
+  }
+
+  redirect("/login");
+}
