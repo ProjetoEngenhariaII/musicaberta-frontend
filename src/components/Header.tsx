@@ -29,7 +29,9 @@ export default async function Header() {
             alt="musicaberta"
           />
         </Avatar>
-        <h1 className="text-2xl text-slate-950 font-semibold">Músicaberta</h1>
+        <h1 className="hidden min-[500px]:block text-2xl text-slate-950 font-semibold">
+          Músicaberta
+        </h1>
       </div>
 
       <DropdownMenu>
