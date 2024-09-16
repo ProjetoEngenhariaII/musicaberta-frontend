@@ -5,7 +5,7 @@ import { signIn } from "next-auth/react";
 export default function SignInButton() {
   return (
     <button
-      onClick={() => signIn("google")}
+      onClick={() => signIn("google", { callbackUrl: "http://localhost:3000" })}
       aria-label="Sign in with Google"
       className="flex items-center bg-white border border-button-border-light rounded-md p-0.5 pr-3 w-full"
     >
