@@ -16,7 +16,7 @@ export default async function Profile() {
 
   return (
     <div className="max-w-screen-xl p-3 mx-auto">
-      <h1 className="text-2xl font-bold mb-5">My Profile</h1>
+      <h1 className="text-2xl font-bold mb-5">Meu perfil</h1>
       <ProfileForm
         initialData={{ bio, roles, instruments }}
         userEmail={session.user?.email || ""}
