@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -27,7 +27,7 @@ export default function ProfileForm({
   const [newRole, setNewRole] = useState("");
   const [newInstrument, setNewInstrument] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
       await api.patch(`http://localhost:3333/users/${userEmail}`, {
@@ -35,17 +35,17 @@ export default function ProfileForm({
         roles,
         instruments,
       });
-      alert("Profile updated successfully!");
+      alert("Perfil alterado com sucesso!");
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert("Failed to update profile. Please try again.");
+      alert("Falha ao alterar dados. Tente novamente.");
     }
   };
 
   const addItem = (
     item: string,
     list: string[],
-    setList: React.Dispatch<React.SetStateAction<string[]>>
+    setList: Dispatch<SetStateAction<string[]>>
   ) => {
     if (item && !list.includes(item)) {
       setList([...list, item]);
@@ -55,7 +55,7 @@ export default function ProfileForm({
   const removeItem = (
     item: string,
     list: string[],
-    setList: React.Dispatch<React.SetStateAction<string[]>>
+    setList: Dispatch<SetStateAction<string[]>>
   ) => {
     setList(list.filter((i) => i !== item));
   };
@@ -73,7 +73,7 @@ export default function ProfileForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="roles">Roles</Label>
+        <Label htmlFor="roles">Ocupações</Label>
         <div className="flex flex-wrap gap-2 mb-2">
           {roles.map((role) => (
             <span
@@ -98,7 +98,7 @@ export default function ProfileForm({
             id="newRole"
             value={newRole}
             onChange={(e) => setNewRole(e.target.value)}
-            placeholder="Add a new role"
+            placeholder="Adicionar uma nova ocupação.."
           />
           <Button
             type="button"
@@ -107,13 +107,13 @@ export default function ProfileForm({
               setNewRole("");
             }}
           >
-            Add
+            Adicionar
           </Button>
         </div>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="instruments">Instruments</Label>
+        <Label htmlFor="instruments">Instrumentos</Label>
         <div className="flex flex-wrap gap-2 mb-2">
           {instruments.map((instrument) => (
             <span
@@ -140,7 +140,7 @@ export default function ProfileForm({
             id="newInstrument"
             value={newInstrument}
             onChange={(e) => setNewInstrument(e.target.value)}
-            placeholder="Add a new instrument"
+            placeholder="Adicionar um novo instrumento.."
           />
           <Button
             type="button"
@@ -149,12 +149,12 @@ export default function ProfileForm({
               setNewInstrument("");
             }}
           >
-            Add
+            Adicionar
           </Button>
         </div>
       </div>
 
-      <Button type="submit">Update Profile</Button>
+      <Button type="submit">Salvar</Button>
     </form>
   );
 }
