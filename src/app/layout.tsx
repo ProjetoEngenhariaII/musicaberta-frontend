@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import SessionWrapper from "@/components/SessionWrapper";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,8 +22,11 @@ export default function RootLayout({
     <html lang="pt-br">
       <body className={cn("font-sans antialiased", inter.className)}>
         <SessionWrapper>
-          <Header />
-          {children}
+          <div className="min-h-screen flex flex-col">
+            <Header />
+            <main className="flex-grow">{children}</main>
+            <Footer />
+          </div>
         </SessionWrapper>
       </body>
     </html>
