@@ -20,7 +20,7 @@ export default async function Header() {
   }
 
   return (
-    <header className="flex justify-between items-center max-w-screen-xl p-3 mx-auto sticky top-0 z-50 border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="flex justify-between items-center w-full max-w-screen-xl p-3 mx-auto sticky top-0 z-50 border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex justify-center items-center gap-2 ">
         <Avatar>
           <AvatarImage
