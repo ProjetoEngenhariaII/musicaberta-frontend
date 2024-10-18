@@ -10,13 +10,20 @@ import { Button } from "@/components/ui/button";
 import { FileText, Music, Clock } from "lucide-react";
 import { Sheet } from "@/lib/types";
 import { formatRelativeDate } from "@/utils/formatDate";
+import TrashSheet from "./TrashSheet";
 
 type SheetCardProps = {
   sheet: Sheet;
+  hasTrash?: boolean;
+  deleteSheet(sheetId: string): void;
 };
 
-export default function SheetCard({ sheet }: SheetCardProps) {
-  const { title, badges, createdAt, mp3Url, pdfUrl, songWriter } = sheet;
+export default function SheetCard({
+  sheet,
+  hasTrash,
+  deleteSheet,
+}: SheetCardProps) {
+  const { title, badges, createdAt, mp3Url, pdfUrl, songWriter, id } = sheet;
 
   return (
     <Card className="w-full max-w-md shadow-md shadow-slate-300 transition-transform hover:scale-105">
@@ -25,9 +32,20 @@ export default function SheetCard({ sheet }: SheetCardProps) {
           <CardTitle className="text-2xl font-bold">{title}</CardTitle>
           <p className="text-sm text-muted-foreground">por {songWriter}</p>
         </div>
-        <div className="text-sm text-muted-foreground flex items-center">
-          <Clock className="mr-1 h-4 w-4" aria-hidden="true" />
-          <time dateTime={createdAt}>{formatRelativeDate(createdAt)}</time>
+        <div className="text-sm text-muted-foreground flex items-center gap-5">
+          <div className="flex items-center gap-1 whitespace-nowrap">
+            <Clock className="h-4 w-4" aria-hidden="true" />
+            <time dateTime={createdAt}>{formatRelativeDate(createdAt)}</time>
+          </div>
+          {hasTrash && (
+            <TrashSheet
+              key={id}
+              sheetId={id}
+              sheetTitle={title}
+              sheetKey={sheet.pdfUrl.split("sheets/")[1]}
+              deleteSheet={deleteSheet}
+            />
+          )}
         </div>
       </CardHeader>
       <CardContent>
