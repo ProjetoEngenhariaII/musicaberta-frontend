@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import SessionWrapper from "@/components/SessionWrapper";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,6 +28,7 @@ export default function RootLayout({
             <main className="flex-grow">{children}</main>
             <Footer />
           </div>
+          <Toaster />
         </SessionWrapper>
       </body>
     </html>
