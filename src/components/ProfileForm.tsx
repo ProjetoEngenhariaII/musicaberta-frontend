@@ -68,7 +68,7 @@ export default function ProfileForm({
           id="bio"
           value={bio}
           onChange={(e) => setBio(e.target.value)}
-          placeholder="Tell us about yourself"
+          placeholder="Digite a sua biografia...."
         />
       </div>
 
