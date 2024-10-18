@@ -20,7 +20,8 @@ export const authOptions: AuthOptions = {
         });
 
         if (result.status === 200 || result.status === 201) {
-          console.log(result.data);
+          user.id = result.data.user.id;
+
           return true;
         }
 
@@ -29,6 +30,21 @@ export const authOptions: AuthOptions = {
         console.log("Error: " + error);
         return false;
       }
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.userId = user.id;
+      }
+
+      return token;
+    },
+
+    async session({ session, token }) {
+      if (session.user && token.userId) {
+        session.user.id = token.userId as string;
+      }
+
+      return session;
     },
   },
 };
