@@ -6,7 +6,9 @@ import { SheetsResponseBody } from "@/lib/types";
 import SearchInput from "@/components/SearchInput";
 import { FilterDropDown } from "@/components/FilterDropDown";
 import { Pagination } from "@/components/Pagination";
-import SheetCard from "@/components/SheetCard";
+import { SheetCard } from "@/components/SheetCard";
+import StarSheet from "@/components/StarSheet";
+import { cn } from "@/lib/utils";
 
 type HomeProps = {
   searchParams: { search?: string; sort?: string; page?: number };
@@ -19,7 +21,7 @@ export default async function Home({ searchParams }: HomeProps) {
     redirect("/login");
   }
 
-  const response: SheetsResponseBody = (
+  const { data, meta }: SheetsResponseBody = (
     await api.get(`/sheets`, {
       params: {
         search: searchParams.search,
@@ -32,7 +34,7 @@ export default async function Home({ searchParams }: HomeProps) {
   return (
     <div className="py-8 px-4 flex flex-col justify-center items-center gap-8">
       <h1 className="text-3xl font-bold">
-        Partituras encontradas: {response.meta.total}
+        Partituras encontradas: {meta.total}
       </h1>
 
       <div className="flex flex-col justify-center items-center gap-8">
@@ -40,20 +42,35 @@ export default async function Home({ searchParams }: HomeProps) {
           <SearchInput />
           <FilterDropDown />
         </div>
+
         <div
-          className={`grid grid-cols-1 md:grid-cols-${
-            response.data.length > 1 ? "2" : "1"
-          } gap-6`}
-        >
-          {response.data.map((sheet) => {
-            return <SheetCard sheet={sheet} key={sheet.id} />;
+          className={cn("grid grid-cols-1 gap-6", {
+            "md:grid-cols-2": data.length > 1,
+            "md:grid-cols-1": !(data.length > 1),
           })}
-          {response.data.length === 0 && (
-            <span>Nenhuma partitura encontrada!</span>
-          )}
+        >
+          {data.map((sheet) => {
+            const { id, badges, createdAt, mp3Url, pdfUrl, songWriter, title } =
+              sheet;
+
+            return (
+              <SheetCard.Root key={id}>
+                <SheetCard.Header
+                  createdAt={createdAt}
+                  songWriter={songWriter}
+                  title={title}
+                >
+                  <StarSheet sheetId={id} sheetTitle={title} />
+                </SheetCard.Header>
+                <SheetCard.Content badges={badges} />
+                <SheetCard.Footer mp3Url={mp3Url} pdfUrl={pdfUrl} />
+              </SheetCard.Root>
+            );
+          })}
+          {data.length === 0 && <span>Nenhuma partitura encontrada!</span>}
         </div>
 
-        <Pagination meta={response.meta} />
+        <Pagination meta={meta} />
       </div>
     </div>
   );
