@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { api } from "@/lib/axios";
 import { X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 interface NewSheetFormProps {
   userId: string;
@@ -19,6 +20,7 @@ export default function NewSheetForm({ userId }: NewSheetFormProps) {
   const [newBadge, setNewBadge] = useState("");
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const { toast } = useToast();
+  const { refresh } = useRouter();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -55,6 +57,8 @@ export default function NewSheetForm({ userId }: NewSheetFormProps) {
       description: `Partitura ${title} foi salva com sucesso!`,
       className: "text-slate-50 bg-green-700",
     });
+
+    refresh();
 
     setSongWriter("");
     setTitle("");
