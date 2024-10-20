@@ -14,27 +14,27 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { api } from "@/lib/axios";
 import { Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 type TrashSheetProps = {
   sheetId: string;
   sheetTitle: string;
   sheetKey: string;
-  deleteSheet(sheetId: string): void;
 };
 
 export default function TrashSheet({
   sheetId,
   sheetTitle,
   sheetKey,
-  deleteSheet,
 }: TrashSheetProps) {
   const { toast } = useToast();
+  const { refresh } = useRouter();
 
   async function handleDeleteSheet() {
     toast({
       title: "Excluindo...",
       description: `Partitura ${sheetTitle} está sendo excluída.`,
-      className: "text-slate-50 bg-orange-700",
+      className: "text-slate-50 bg-amber-600",
     });
 
     try {
@@ -50,8 +50,7 @@ export default function TrashSheet({
         description: `Partitura ${sheetTitle} foi excluída com sucesso.`,
         className: "text-slate-50 bg-green-700",
       });
-
-      deleteSheet(sheetId);
+      refresh();
     } catch (error) {
       toast({
         variant: "destructive",
