@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/lib/axios";
 import { X } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface ProfileFormProps {
   initialData: {
@@ -14,31 +15,38 @@ interface ProfileFormProps {
     roles: string[];
     instruments: string[];
   };
-  userEmail: string;
+  userId: string;
 }
 
-export default function ProfileForm({
-  initialData,
-  userEmail,
-}: ProfileFormProps) {
+export default function ProfileForm({ initialData, userId }: ProfileFormProps) {
   const [bio, setBio] = useState(initialData.bio);
   const [roles, setRoles] = useState(initialData.roles);
   const [instruments, setInstruments] = useState(initialData.instruments);
   const [newRole, setNewRole] = useState("");
   const [newInstrument, setNewInstrument] = useState("");
+  const { toast } = useToast();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      await api.patch(`http://localhost:3333/users/${userEmail}`, {
+      toast({
+        title: "Atualizando seus dados...",
+      });
+      await api.patch(`http://localhost:3333/users/${userId}`, {
         bio,
         roles,
         instruments,
       });
-      alert("Perfil alterado com sucesso!");
+      toast({
+        title: "Perfil alterado com sucesso!",
+        className: "text-slate-50 bg-green-700",
+      });
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert("Falha ao alterar dados. Tente novamente.");
+      toast({
+        title: "Falha ao alterar dados. Tente novamente.",
+        variant: "destructive",
+      });
     }
   };
 

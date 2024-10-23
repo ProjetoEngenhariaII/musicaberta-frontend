@@ -11,7 +11,7 @@ export default async function Profile() {
     redirect("/login");
   }
 
-  const res = await api.get(`/users/${session.user?.email}`);
+  const res = await api.get(`/users/${session.user?.id}`);
   const { bio, roles, instruments } = res.data.user;
 
   return (
@@ -19,7 +19,7 @@ export default async function Profile() {
       <h1 className="text-2xl font-bold mb-5">Meu perfil</h1>
       <ProfileForm
         initialData={{ bio, roles, instruments }}
-        userEmail={session.user?.email || ""}
+        userId={session.user?.id}
       />
     </div>
   );
