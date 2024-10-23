@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "./api/auth/[...nextauth]/route";
 import { api } from "@/lib/axios";
-import { SheetsResponseBody } from "@/lib/types";
+import { FavoritesResponseBody, SheetsResponseBody } from "@/lib/types";
 import SearchInput from "@/components/SearchInput";
 import { FilterDropDown } from "@/components/FilterDropDown";
 import { Pagination } from "@/components/Pagination";
@@ -31,6 +31,14 @@ export default async function Home({ searchParams }: HomeProps) {
     })
   ).data;
 
+  const res = await api.get(`/favorites`, {
+    params: {
+      userId: session?.user.id,
+    },
+  });
+
+  const { favorites }: FavoritesResponseBody = res.data;
+
   return (
     <div className="py-8 px-4 flex flex-col justify-center items-center gap-8">
       <h1 className="text-3xl font-bold">
@@ -52,15 +60,29 @@ export default async function Home({ searchParams }: HomeProps) {
           {data.map((sheet) => {
             const { id, badges, createdAt, mp3Url, pdfUrl, songWriter, title } =
               sheet;
+            const isFavorited = favorites.find(
+              (favorite) => favorite.sheet.id === id
+            );
 
             return (
-              <SheetCard.Root key={id}>
+              <SheetCard.Root
+                key={id}
+                className={cn({
+                  "shadow-blue-600 border-blue-600": isFavorited,
+                })}
+              >
                 <SheetCard.Header
                   createdAt={createdAt}
                   songWriter={songWriter}
                   title={title}
                 >
-                  <StarSheet sheetId={id} sheetTitle={title} />
+                  <StarSheet
+                    userId={session.user.id}
+                    sheetId={id}
+                    favoriteId={isFavorited?.favoriteId}
+                    sheetTitle={title}
+                    isFavorited={isFavorited != undefined}
+                  />
                 </SheetCard.Header>
                 <SheetCard.Content badges={badges} />
                 <SheetCard.Footer mp3Url={mp3Url} pdfUrl={pdfUrl} />

@@ -23,3 +23,10 @@ export type SheetsResponseBody = {
   data: Sheet[];
   meta: MetaResponseBody;
 };
+
+export type FavoritesResponseBody = {
+  favorites: {
+    favoriteId: string;
+    sheet: Sheet;
+  }[];
+};

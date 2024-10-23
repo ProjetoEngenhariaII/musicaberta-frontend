@@ -1,13 +1,23 @@
-import { ReactNode } from "react";
+import { HTMLAttributes, ReactNode } from "react";
 import { Card } from "../ui/card";
+import { cn } from "@/lib/utils";
 
-type SheetCardRootProps = {
+interface SheetCardRootProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
-};
+}
 
-export default function SheetCardRoot({ children }: SheetCardRootProps) {
+export default function SheetCardRoot({
+  children,
+  ...rest
+}: SheetCardRootProps) {
   return (
-    <Card className="w-full max-w-md shadow-md shadow-slate-300 transition-transform hover:scale-105">
+    <Card
+      {...rest}
+      className={cn(
+        "w-full max-w-md shadow-md shadow-slate-300 transition-transform hover:scale-105",
+        rest.className
+      )}
+    >
       {children}
     </Card>
   );
