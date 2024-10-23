@@ -73,12 +73,10 @@ export default function StarSheet({
     });
 
     try {
-      const res = await api.post("favorites", {
+      await api.post("favorites", {
         userId,
         sheetId,
       });
-
-      console.log(res.data);
 
       toast({
         title: "Partitura favoritada!",
