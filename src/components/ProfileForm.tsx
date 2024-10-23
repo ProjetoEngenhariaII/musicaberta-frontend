@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/lib/axios";
 import { X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 interface ProfileFormProps {
   initialData: {
@@ -25,6 +26,7 @@ export default function ProfileForm({ initialData, userId }: ProfileFormProps) {
   const [newRole, setNewRole] = useState("");
   const [newInstrument, setNewInstrument] = useState("");
   const { toast } = useToast();
+  const { refresh } = useRouter();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -41,6 +43,7 @@ export default function ProfileForm({ initialData, userId }: ProfileFormProps) {
         title: "Perfil alterado com sucesso!",
         className: "text-slate-50 bg-green-700",
       });
+      refresh();
     } catch (error) {
       console.error("Error updating profile:", error);
       toast({
