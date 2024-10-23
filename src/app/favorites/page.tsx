@@ -22,8 +22,6 @@ export default async function Favorites() {
 
   const { favorites }: FavoritesResponseBody = res.data;
 
-  console.log({ favorites });
-
   return (
     <div className="flex flex-col justify-center items-center gap-12 py-8 px-4">
       <h1 className="text-3xl font-bold">Meus favoritos</h1>
