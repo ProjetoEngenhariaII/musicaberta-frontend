@@ -42,7 +42,8 @@ export default async function MySheets() {
                 <TrashSheet
                   sheetId={id}
                   sheetTitle={title}
-                  sheetKey={sheet.pdfUrl.split("sheets/")[1]}
+                  pdfName={sheet.pdfUrl.split("sheets/")[1]}
+                  mp3Name={sheet.mp3Url.split("sheets/")[1]}
                 />
               </SheetCard.Header>
               <SheetCard.Content badges={badges} />

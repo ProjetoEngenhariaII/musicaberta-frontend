@@ -19,13 +19,15 @@ import { useRouter } from "next/navigation";
 type TrashSheetProps = {
   sheetId: string;
   sheetTitle: string;
-  sheetKey: string;
+  pdfName: string;
+  mp3Name: string;
 };
 
 export default function TrashSheet({
   sheetId,
   sheetTitle,
-  sheetKey,
+  mp3Name,
+  pdfName,
 }: TrashSheetProps) {
   const { toast } = useToast();
   const { refresh } = useRouter();
@@ -41,7 +43,8 @@ export default function TrashSheet({
       await api.delete("sheets", {
         params: {
           id: sheetId,
-          key: sheetKey,
+          pdfName,
+          mp3Name,
         },
       });
 
