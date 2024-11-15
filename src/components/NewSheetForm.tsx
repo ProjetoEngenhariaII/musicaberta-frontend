@@ -19,6 +19,7 @@ export default function NewSheetForm({ userId }: NewSheetFormProps) {
   const [badges, setBadges] = useState<string[]>([]);
   const [newBadge, setNewBadge] = useState("");
   const [pdfFile, setPdfFile] = useState<File | null>(null);
+  const [mp3File, setMp3File] = useState<File | null>(null);
   const { toast } = useToast();
   const { refresh } = useRouter();
 
@@ -27,27 +28,54 @@ export default function NewSheetForm({ userId }: NewSheetFormProps) {
 
     if (!pdfFile) return;
 
-    const formData = new FormData();
-    formData.append("file", pdfFile as File);
+    const formDataPdf = new FormData();
+    formDataPdf.append("pdfFile", pdfFile as File);
 
     toast({
       title: "Fazendo upload...",
-      description: `Salvando dados da partitura ${title}`,
+      description: `Salvando PDF da partitura`,
     });
 
-    const uploadResponse = await api.post("sheets/upload", formData, {
+    const uploadResponse = await api.post("sheets/upload", formDataPdf, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
 
     const { fileURL } = uploadResponse.data;
+    const pdfUrl = fileURL;
+
+    let mp3Url = "";
+
+    if (mp3File) {
+      const formDataMp3 = new FormData();
+      formDataMp3.append("mp3File", mp3File as File);
+
+      toast({
+        title: "Fazendo upload...",
+        description: `Salvando áudio da partitura`,
+      });
+
+      const uploadResponse = await api.post("sheets/upload", formDataMp3, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      const { fileURL } = uploadResponse.data;
+      mp3Url = fileURL;
+    }
+
+    toast({
+      title: "Fazendo upload...",
+      description: `Salvando dados restantes da partitura ${title}`,
+    });
 
     await api.post("sheets", {
       title,
       songWriter,
-      pdfUrl: fileURL,
-      mp3Url: "",
+      pdfUrl,
+      mp3Url,
       badges,
       userId,
     });
@@ -65,6 +93,7 @@ export default function NewSheetForm({ userId }: NewSheetFormProps) {
     setBadges([]);
     setNewBadge("");
     setPdfFile(null);
+    setMp3File(null);
   };
 
   const addItem = (
@@ -117,6 +146,19 @@ export default function NewSheetForm({ userId }: NewSheetFormProps) {
           onChange={(e) => {
             if (e.target.files) {
               setPdfFile(e.target.files[0]);
+            }
+          }}
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="mp3Upload">Upload de MP3</Label>
+        <Input
+          id="mp3Upload"
+          type="file"
+          accept="audio/mp3"
+          onChange={(e) => {
+            if (e.target.files) {
+              setMp3File(e.target.files[0]);
             }
           }}
         />
