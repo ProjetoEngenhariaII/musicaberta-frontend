@@ -19,6 +19,10 @@ export default async function Header() {
     return null;
   }
 
+  const name = session.user.name || "MM";
+
+  const avatarFallbackText = `${name[0]}${name[1]}`.toUpperCase();
+
   return (
     <header className="flex justify-between items-center w-full max-w-screen-xl p-3 mx-auto sticky top-0 z-50 border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex justify-center items-center gap-2 ">
@@ -42,7 +46,7 @@ export default async function Header() {
               src={session?.user?.image || ""}
               alt={session?.user?.name || ""}
             />
-            <AvatarFallback></AvatarFallback>
+            <AvatarFallback>{avatarFallbackText}</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="mr-2">
