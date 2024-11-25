@@ -28,13 +28,6 @@ export default function SheetCardHeader({
           <time dateTime={createdAt}>{formatRelativeDate(createdAt)}</time>
         </div>
         {children}
-        {/* <TrashSheet
-            key={id}
-            sheetId={id}
-            sheetTitle={title}
-            sheetKey={sheet.pdfUrl.split("sheets/")[1]}
-            deleteSheet={deleteSheet}
-          /> */}
       </div>
     </CardHeader>
   );
