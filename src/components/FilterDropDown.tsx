@@ -55,6 +55,9 @@ export function FilterDropDown() {
           <DropdownMenuRadioItem value="asc">
             Mais antigos
           </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="mostFavorited">
+            Mais favoritados
+          </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
