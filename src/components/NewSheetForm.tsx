@@ -1,6 +1,12 @@
 "use client";
 
-import { Dispatch, FormEvent, SetStateAction, useState } from "react";
+import {
+  Dispatch,
+  FormEvent,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -203,7 +209,13 @@ export default function NewSheetForm({ userId }: NewSheetFormProps) {
         </div>
       </div>
       <Button
-        disabled={!pdfFile || !songWriter.trim() || !title.trim()}
+        disabled={
+          !pdfFile ||
+          pdfFile.type != "application/pdf" ||
+          (mp3File != null && mp3File.type != "audio/mpeg") ||
+          !songWriter.trim() ||
+          !title.trim()
+        }
         type="submit"
       >
         Salvar
