@@ -52,7 +52,7 @@ export default async function Home({ searchParams }: HomeProps) {
         </div>
 
         <div
-          className={cn("grid grid-cols-1 gap-6", {
+          className={cn("grid w-full max-w-screen-xl grid-cols-1 gap-8", {
             "md:grid-cols-2": data.length > 1,
             "md:grid-cols-1": !(data.length > 1),
           })}

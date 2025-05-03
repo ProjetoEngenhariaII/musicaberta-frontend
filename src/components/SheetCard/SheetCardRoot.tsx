@@ -14,7 +14,7 @@ export default function SheetCardRoot({
     <Card
       {...rest}
       className={cn(
-        "w-full flex flex-col justify-between max-w-md shadow-md shadow-slate-300 transition-transform hover:scale-105",
+        "w-full flex flex-col justify-between shadow-md shadow-slate-300 transition-transform hover:scale-105",
         rest.className
       )}
     >
