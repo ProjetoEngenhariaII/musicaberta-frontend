@@ -63,11 +63,6 @@ export default async function Header() {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Link href="/?page=1" className="w-full">
-              Buscar partituras
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
             <Link href="/mysheets" className="w-full">
               Minhas partituras
             </Link>
@@ -75,6 +70,11 @@ export default async function Header() {
           <DropdownMenuItem>
             <Link href="/favorites" className="w-full">
               Partituras favoritas
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link href="/requests" className="w-full">
+              Solicitar partitura
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
