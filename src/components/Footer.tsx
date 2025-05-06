@@ -29,7 +29,10 @@ export default async function Footer() {
                 rel="noopener noreferrer"
                 aria-label="Facebook"
               >
-                <img src="facebook.svg" className="h-6 w-6" />
+                <img
+                  src="https://raw.githubusercontent.com/ProjetoEngenhariaII/musicaberta-frontend/refs/heads/main/public/facebook.svg"
+                  className="h-6 w-6"
+                />
               </a>
               <a
                 href="https://instagram.com"
@@ -37,7 +40,10 @@ export default async function Footer() {
                 rel="noopener noreferrer"
                 aria-label="Instagram"
               >
-                <img src="instagram.svg" className="h-6 w-6" />
+                <img
+                  src="https://raw.githubusercontent.com/ProjetoEngenhariaII/musicaberta-frontend/refs/heads/main/public/instagram.svg"
+                  className="h-6 w-6"
+                />
               </a>
               <a
                 href="https://github.com"
@@ -45,7 +51,10 @@ export default async function Footer() {
                 rel="noopener noreferrer"
                 aria-label="GitHub"
               >
-                <img src="github.svg" className="h-6 w-6" />
+                <img
+                  src="https://raw.githubusercontent.com/ProjetoEngenhariaII/musicaberta-frontend/refs/heads/main/public/github.svg"
+                  className="h-6 w-6"
+                />
               </a>
             </div>
           </div>
