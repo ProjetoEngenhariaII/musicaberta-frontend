@@ -11,7 +11,7 @@ export default async function Favorites() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    redirect("/login");
+    redirect("/api/auth/signin");
   }
 
   const res = await api.get(`/favorites`, {

@@ -48,17 +48,22 @@ export default function RequestCard({
       </CardHeader>
 
       <CardContent>
-        <div className="flex flex-wrap gap-2 mb-4">
-          {badges.map((badge) => (
-            <Badge key={badge} variant="secondary">
-              {badge}
-            </Badge>
-          ))}
-        </div>
+        {badges.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-4">
+            {badges.map((badge) => (
+              <Badge key={badge} variant="secondary">
+                {badge}
+              </Badge>
+            ))}
+          </div>
+        )}
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-1">
             <HandHeart className="h-4 w-4" aria-hidden="true" />
-            <span>{contributionsCount} contribuições</span>
+            <span>
+              {contributionsCount}{" "}
+              {contributionsCount === 1 ? "contribuição" : "contribuições"}
+            </span>
           </div>
           <div className="flex items-center gap-1">
             <Clock className="h-4 w-4" aria-hidden="true" />
@@ -74,7 +79,7 @@ export default function RequestCard({
             Contribuir
           </Button>
         </Link>
-        <Link href={`/request?id=${id}`}>
+        <Link href={`/requests/${id}`}>
           <Button variant="outline">
             <Info className="mr-2 h-4 w-4" />
             Ver Detalhes

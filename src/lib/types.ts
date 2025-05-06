@@ -9,7 +9,23 @@ export type Sheet = {
   badges: string[];
   userId: string;
 };
-
+export type Request = {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  title: string;
+  description: string;
+  badges: string;
+  status: string;
+  userId: string;
+  user: {
+    name: string;
+    avatarUrl: string;
+  };
+  _count: {
+    Sheet: number;
+  };
+};
 export type MetaResponseBody = {
   current: number;
   path: string;

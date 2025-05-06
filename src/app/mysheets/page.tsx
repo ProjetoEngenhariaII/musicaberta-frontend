@@ -11,7 +11,7 @@ export default async function MySheets() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    redirect("/login");
+    redirect("/api/auth/signin");
   }
 
   const userId = session.user.id;
