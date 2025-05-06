@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,9 +11,10 @@ import { useRouter } from "next/navigation";
 
 interface NewSheetFormProps {
   userId: string;
+  requestId?: string;
 }
 
-export default function NewSheetForm({ userId }: NewSheetFormProps) {
+export default function NewSheetForm({ userId, requestId }: NewSheetFormProps) {
   const [songWriter, setSongWriter] = useState("");
   const [title, setTitle] = useState("");
   const [badges, setBadges] = useState<string[]>([]);
@@ -84,6 +79,7 @@ export default function NewSheetForm({ userId }: NewSheetFormProps) {
       mp3Url,
       badges,
       userId,
+      requestId,
     });
 
     toast({
