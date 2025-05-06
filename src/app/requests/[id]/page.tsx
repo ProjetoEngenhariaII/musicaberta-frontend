@@ -86,17 +86,12 @@ export default async function RequestDetails({
 
       <div className="border rounded-xl p-6">{request.description}</div>
 
-      <div className="mt-8 flex flex-col gap-5">
+      <div className="mt-8 w-full flex flex-col gap-5">
         <h1 className="text-2xl font-medium">
           Contribuições ({request._count.Sheet})
         </h1>
 
-        <div
-          className={cn("grid w-full max-w-screen-xl grid-cols-1 gap-8", {
-            "md:grid-cols-2": sheets.length > 1,
-            "md:grid-cols-1": !(sheets.length > 1),
-          })}
-        >
+        <div className="grid w-full max-w-screen-xl grid-cols-2 gap-8">
           {sheets.map((sheet) => {
             const { id, badges, createdAt, mp3Url, pdfUrl, songWriter, title } =
               sheet;
