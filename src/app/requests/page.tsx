@@ -5,13 +5,18 @@ import SearchInput from "@/components/SearchInput";
 import RequestCard from "@/components/RequestCard";
 import { cn } from "@/lib/utils";
 import RequestSheet from "@/components/RequestSheet";
+import { api } from "@/lib/axios";
+import { Request } from "@/lib/types";
 
 export default async function RequestsPage() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    redirect("/login");
+    redirect("/api/auth/signin");
   }
+
+  const res = await api.get(`/requests`);
+  const requests: Request[] = res.data.requests;
 
   return (
     <div className="py-8 px-4 flex flex-col justify-center items-center gap-8">
@@ -26,22 +31,22 @@ export default async function RequestsPage() {
 
       <div
         className={cn("w-full max-w-screen-xl grid grid-cols-1 gap-8", {
-          "md:grid-cols-2": [1, 2, 3, 4, 5].length > 1,
-          "md:grid-cols-1": !([1, 2, 3, 4, 5].length > 1),
+          "md:grid-cols-2": requests.length > 1,
+          "md:grid-cols-1": !(requests.length > 1),
         })}
       >
-        {[1, 2, 3, 4, 5].map((item) => (
+        {requests.map((req) => (
           <RequestCard
-            id={item.toString()}
-            key={item}
-            title="Requisição de partitura"
+            id={req.id}
+            key={req.id}
+            title={req.title}
             user={{
-              name: "Gian Lucas",
-              avatarUrl: "https://avatars.githubusercontent.com/u/67169105?v=4",
+              name: req.user.name,
+              avatarUrl: req.user.avatarUrl,
             }}
-            badges={["Badge 1", "Badge 2"]}
-            contributionsCount={10}
-            createdAt="2021-01-01"
+            badges={req.badges !== "" ? req.badges.split(",") : []}
+            contributionsCount={req._count.Sheet}
+            createdAt={req.createdAt}
           />
         ))}
       </div>
