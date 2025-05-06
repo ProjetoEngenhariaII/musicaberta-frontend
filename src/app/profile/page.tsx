@@ -8,7 +8,7 @@ export default async function Profile() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    redirect("/login");
+    redirect("/api/auth/signin");
   }
 
   const res = await api.get(`/users/${session.user?.id}`);

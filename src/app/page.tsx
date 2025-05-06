@@ -18,7 +18,7 @@ export default async function Home({ searchParams }: HomeProps) {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    redirect("/login");
+    redirect("/api/auth/signin");
   }
 
   const { data, meta }: SheetsResponseBody = (
