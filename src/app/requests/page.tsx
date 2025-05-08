@@ -41,6 +41,7 @@ export default async function RequestsPage() {
             key={req.id}
             title={req.title}
             user={{
+              id: req.userId,
               name: req.user.name,
               avatarUrl: req.user.avatarUrl,
             }}

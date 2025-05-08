@@ -16,6 +16,7 @@ type RequestCardProps = {
   id: string;
   title: string;
   user: {
+    id: string;
     name: string;
     avatarUrl: string;
   };
@@ -37,13 +38,16 @@ export default function RequestCard({
       <CardHeader className="flex flex-row items-start justify-between gap-12 space-y-0 pb-2">
         <div>
           <CardTitle className="text-2xl font-bold">{title}</CardTitle>
-          <div className="flex items-center gap-2 mt-2">
+          <Link
+            href={`/users/${user.id}`}
+            className="flex items-center gap-2 mt-2"
+          >
             <Avatar className="h-6 w-6">
               <AvatarImage src={user.avatarUrl} />
               <AvatarFallback>{user.name[0]}</AvatarFallback>
             </Avatar>
-            <p className="text-sm">{user.name}</p>
-          </div>
+            <p className="text-sm text-slate-700">{user.name}</p>
+          </Link>
         </div>
       </CardHeader>
 

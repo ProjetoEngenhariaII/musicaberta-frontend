@@ -75,6 +75,11 @@ export default async function Home({ searchParams }: HomeProps) {
                   createdAt={createdAt}
                   songWriter={songWriter}
                   title={title}
+                  user={{
+                    id: sheet.userId,
+                    name: sheet.user.name,
+                    avatarUrl: sheet.user.avatarUrl,
+                  }}
                 >
                   <StarSheet
                     userId={session.user.id}

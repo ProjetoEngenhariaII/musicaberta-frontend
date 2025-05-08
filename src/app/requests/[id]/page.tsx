@@ -14,9 +14,12 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Request } from "@/lib/types";
 
+interface RequestWithSheets extends Request {
+  Sheet: Sheet[];
+}
+
 type RequestData = {
-  request: Request;
-  sheets: Sheet[];
+  request: RequestWithSheets;
 };
 
 export default async function RequestDetails({
@@ -32,7 +35,9 @@ export default async function RequestDetails({
   }
 
   const res = await api.get(`/requests/${id}`);
-  const { request, sheets }: RequestData = res.data;
+  const { request }: RequestData = res.data;
+  const sheets = request.Sheet;
+
   const avatarFallbackText =
     `${request.user.name[0]}${request.user.name[1]}`.toUpperCase();
 
@@ -110,6 +115,11 @@ export default async function RequestDetails({
                   createdAt={createdAt}
                   songWriter={songWriter}
                   title={title}
+                  user={{
+                    id: sheet.userId,
+                    name: sheet.user.name,
+                    avatarUrl: sheet.user.avatarUrl,
+                  }}
                 >
                   <StarSheet
                     userId={session.user.id}

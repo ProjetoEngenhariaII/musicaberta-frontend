@@ -38,6 +38,11 @@ export default async function MySheets() {
                 createdAt={createdAt}
                 songWriter={songWriter}
                 title={title}
+                user={{
+                  id: userId,
+                  name: session.user.name ?? "",
+                  avatarUrl: session.user.image ?? "",
+                }}
               >
                 <TrashSheet
                   sheetId={id}

@@ -42,6 +42,11 @@ export default async function Favorites() {
               className={"shadow-blue-600 border-blue-600"}
             >
               <SheetCard.Header
+                user={{
+                  id: sheet.userId,
+                  name: sheet.user.name,
+                  avatarUrl: sheet.user.avatarUrl,
+                }}
                 createdAt={createdAt}
                 songWriter={songWriter}
                 title={title}

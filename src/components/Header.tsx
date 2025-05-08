@@ -29,7 +29,7 @@ export default async function Header() {
         <Avatar>
           <AvatarImage
             className="size-12 rounded-full"
-            src="https://raw.githubusercontent.com/ProjetoEngenhariaII/musicaberta-frontend/refs/heads/main/public/musicaberta-logo.png"
+            src="musicaberta-logo.png"
             alt="musicaberta"
           />
         </Avatar>

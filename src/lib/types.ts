@@ -8,6 +8,10 @@ export type Sheet = {
   mp3Url: string;
   badges: string[];
   userId: string;
+  user: {
+    name: string;
+    avatarUrl: string;
+  };
 };
 export type Request = {
   id: string;
