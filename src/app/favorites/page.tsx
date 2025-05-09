@@ -1,22 +1,33 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import { api } from "@/lib/axios";
 import { FavoritesResponseBody } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { SheetCard } from "@/components/SheetCard";
 import StarSheet from "@/components/StarSheet";
+import { ResponseUser } from "@/components/Header";
+import { cookies } from "next/headers";
 
 export default async function Favorites() {
-  const session = await getServerSession(authOptions);
+  const token = cookies().get("token");
 
-  if (!session) {
-    redirect("/api/auth/signin");
+  if (!token) {
+    redirect("/login");
   }
 
+  const resUser = await api.get("/users/me", {
+    headers: {
+      Authorization: `Bearer ${token.value}`,
+    },
+  });
+
+  const { user } = resUser.data as ResponseUser;
+
   const res = await api.get(`/favorites`, {
+    headers: {
+      Authorization: `Bearer ${token.value}`,
+    },
     params: {
-      userId: session?.user.id,
+      userId: user.id,
     },
   });
 
@@ -55,7 +66,7 @@ export default async function Favorites() {
                   sheetId={id}
                   sheetTitle={title}
                   favoriteId={favoriteId}
-                  userId={session.user.id}
+                  userId={user.id}
                   isFavorited
                 />
               </SheetCard.Header>

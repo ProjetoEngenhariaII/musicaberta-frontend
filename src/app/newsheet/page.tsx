@@ -1,27 +1,35 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import NewSheetForm from "@/components/NewSheetForm";
+import { cookies } from "next/headers";
+import { ResponseUser } from "@/components/Header";
+import { api } from "@/lib/axios";
 
 type NewSheetProps = {
   searchParams: { id?: string };
 };
 
 export default async function NewSheet({ searchParams }: NewSheetProps) {
-  const session = await getServerSession(authOptions);
+  const token = cookies().get("token");
 
-  if (!session) {
-    redirect("/api/auth/signin");
+  if (!token) {
+    redirect("/login");
   }
 
+  const resUser = await api.get("/users/me", {
+    headers: {
+      Authorization: `Bearer ${token?.value}`,
+    },
+  });
+
+  const { user } = resUser.data as ResponseUser;
+
   const { id } = searchParams;
-  const userId = session.user.id;
 
   return (
     <div className="flex flex-col justify-center items-center gap-12 py-8 px-4">
       <h1 className="text-3xl font-bold">Upload de partitura</h1>
 
-      <NewSheetForm userId={userId} requestId={id} />
+      <NewSheetForm userId={user.id} requestId={id} />
     </div>
   );
 }

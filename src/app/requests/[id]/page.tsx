@@ -1,4 +1,3 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { SheetCard } from "@/components/SheetCard";
 import StarSheet from "@/components/StarSheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -9,10 +8,11 @@ import { FavoritesResponseBody, Sheet } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { formatRelativeDate } from "@/utils/formatDate";
 import { ArrowLeft, HandHeart } from "lucide-react";
-import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Request } from "@/lib/types";
+import { cookies } from "next/headers";
+import { ResponseUser } from "@/components/Header";
 
 interface RequestWithSheets extends Request {
   Sheet: Sheet[];
@@ -28,13 +28,26 @@ export default async function RequestDetails({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const session = await getServerSession(authOptions);
 
-  if (!session) {
-    redirect("/api/auth/signin");
+  const token = cookies().get("token");
+
+  if (!token) {
+    redirect("/login");
   }
 
-  const res = await api.get(`/requests/${id}`);
+  const resUser = await api.get("/users/me", {
+    headers: {
+      Authorization: `Bearer ${token.value}`,
+    },
+  });
+
+  const { user } = resUser.data as ResponseUser;
+
+  const res = await api.get(`/requests/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token.value}`,
+    },
+  });
   const { request }: RequestData = res.data;
   const sheets = request.Sheet;
 
@@ -43,7 +56,10 @@ export default async function RequestDetails({
 
   const resFavorites = await api.get(`/favorites`, {
     params: {
-      userId: session?.user.id,
+      userId: user.id,
+    },
+    headers: {
+      Authorization: `Bearer ${token.value}`,
     },
   });
 
@@ -122,7 +138,7 @@ export default async function RequestDetails({
                   }}
                 >
                   <StarSheet
-                    userId={session.user.id}
+                    userId={user.id}
                     sheetId={id}
                     favoriteId={isFavorited?.favoriteId}
                     sheetTitle={title}

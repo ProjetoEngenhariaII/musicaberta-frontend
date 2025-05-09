@@ -9,24 +9,70 @@ import { api } from "@/lib/axios";
 import { X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { getToken } from "@/utils/getTokenFromCookie";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { User } from "./Header";
 
 interface ProfileFormProps {
-  initialData: {
-    bio: string;
-    roles: string[];
-    instruments: string[];
-  };
-  userId: string;
+  user: User;
 }
 
-export default function ProfileForm({ initialData, userId }: ProfileFormProps) {
-  const [bio, setBio] = useState(initialData.bio);
-  const [roles, setRoles] = useState(initialData.roles);
-  const [instruments, setInstruments] = useState(initialData.instruments);
+export default function ProfileForm({ user }: ProfileFormProps) {
+  const [name, setName] = useState(user.name);
+  const [bio, setBio] = useState(user.bio);
+  const [roles, setRoles] = useState(user.roles);
+  const [instruments, setInstruments] = useState(user.instruments);
   const [newRole, setNewRole] = useState("");
   const [newInstrument, setNewInstrument] = useState("");
+  const [avatar, setAvatar] = useState<File | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string>(
+    user.avatarUrl || ""
+  );
   const { toast } = useToast();
   const { refresh } = useRouter();
+
+  const token = getToken();
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setAvatar(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatarPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSubmitAvatar = async () => {
+    try {
+      toast({
+        title: "Atualizando seus dados...",
+      });
+      const formData = new FormData();
+      formData.append("avatar", avatar as File);
+
+      await api.post(`/users/upload-avatar/${user.id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      toast({
+        title: "Foto de perfil alterada com sucesso!",
+        className: "text-slate-50 bg-green-700",
+      });
+      refresh();
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast({
+        title: "Falha ao salvar nova foto de perfil. Tente novamente.",
+        variant: "destructive",
+      });
+    }
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -34,11 +80,23 @@ export default function ProfileForm({ initialData, userId }: ProfileFormProps) {
       toast({
         title: "Atualizando seus dados...",
       });
-      await api.patch(`http://localhost:3333/users/${userId}`, {
-        bio,
-        roles,
-        instruments,
-      });
+
+      await api.patch(
+        `/users/${user.id}`,
+        {
+          name,
+          bio,
+          roles,
+          instruments,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
       toast({
         title: "Perfil alterado com sucesso!",
         className: "text-slate-50 bg-green-700",
@@ -72,9 +130,51 @@ export default function ProfileForm({ initialData, userId }: ProfileFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6 max-w-md mx-auto">
+      <div className="flex flex-col items-start gap-4 mt-4">
+        <Avatar className="size-24">
+          <AvatarImage
+            src={avatarPreview}
+            alt={user.name || "Avatar preview"}
+            className="object-cover"
+          />
+          <AvatarFallback>
+            {user.name ? user.name.slice(0, 2).toUpperCase() : "??"}
+          </AvatarFallback>
+        </Avatar>
+        <div className="grid gap-2 w-full">
+          <Label className="text-md font-semibold" htmlFor="avatar">
+            Foto de perfil
+          </Label>
+          <Input
+            id="avatar"
+            type="file"
+            accept="image/*"
+            onChange={handleAvatarChange}
+            className="cursor-pointer"
+          />
+        </div>
+        <Button disabled={!avatar} onClick={handleSubmitAvatar}>
+          Salvar foto
+        </Button>
+      </div>
+
       <div className="space-y-2">
-        <Label htmlFor="bio">Bio</Label>
+        <Label className="text-md font-semibold" htmlFor="name">
+          Nome
+        </Label>
+        <Input
+          id="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Digite o seu nome...."
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label className="text-md font-semibold" htmlFor="bio">
+          Bio
+        </Label>
         <Textarea
           id="bio"
           value={bio}
@@ -84,7 +184,9 @@ export default function ProfileForm({ initialData, userId }: ProfileFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="roles">Ocupações</Label>
+        <Label className="text-md font-semibold" htmlFor="roles">
+          Ocupações
+        </Label>
         <div className="flex flex-wrap gap-2 mb-2">
           {roles.map((role) => (
             <span
@@ -124,7 +226,9 @@ export default function ProfileForm({ initialData, userId }: ProfileFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="instruments">Instrumentos</Label>
+        <Label className="text-md font-semibold" htmlFor="instruments">
+          Instrumentos
+        </Label>
         <div className="flex flex-wrap gap-2 mb-2">
           {instruments.map((instrument) => (
             <span
@@ -165,7 +269,9 @@ export default function ProfileForm({ initialData, userId }: ProfileFormProps) {
         </div>
       </div>
 
-      <Button type="submit">Salvar</Button>
+      <Button className="mt-6" type="submit">
+        Salvar
+      </Button>
     </form>
   );
 }

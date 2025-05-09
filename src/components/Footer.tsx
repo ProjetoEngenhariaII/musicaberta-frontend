@@ -1,13 +1,4 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getServerSession } from "next-auth";
-
 export default async function Footer() {
-  const session = await getServerSession(authOptions);
-
-  if (!session) {
-    return null;
-  }
-
   return (
     <footer className="bg-slate-200 py-8">
       <div className="container mx-auto px-4">

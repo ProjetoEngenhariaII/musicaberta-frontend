@@ -8,6 +8,7 @@ import { api } from "@/lib/axios";
 import { X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { getToken } from "@/utils/getTokenFromCookie";
 
 interface NewSheetFormProps {
   userId: string;
@@ -23,6 +24,8 @@ export default function NewSheetForm({ userId, requestId }: NewSheetFormProps) {
   const [mp3File, setMp3File] = useState<File | null>(null);
   const { toast } = useToast();
   const { refresh } = useRouter();
+
+  const token = getToken();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -40,6 +43,7 @@ export default function NewSheetForm({ userId, requestId }: NewSheetFormProps) {
     const uploadResponse = await api.post("sheets/upload", formDataPdf, {
       headers: {
         "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -60,6 +64,7 @@ export default function NewSheetForm({ userId, requestId }: NewSheetFormProps) {
       const uploadResponse = await api.post("sheets/upload", formDataMp3, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -72,15 +77,23 @@ export default function NewSheetForm({ userId, requestId }: NewSheetFormProps) {
       description: `Salvando dados restantes da partitura ${title}`,
     });
 
-    await api.post("sheets", {
-      title,
-      songWriter,
-      pdfUrl,
-      mp3Url,
-      badges,
-      userId,
-      requestId,
-    });
+    await api.post(
+      "sheets",
+      {
+        title,
+        songWriter,
+        pdfUrl,
+        mp3Url,
+        badges,
+        userId,
+        requestId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     toast({
       title: "Upload completo!",
