@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { api } from "@/lib/axios";
+import { getToken } from "@/utils/getTokenFromCookie";
 import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -31,6 +32,7 @@ export default function TrashSheet({
 }: TrashSheetProps) {
   const { toast } = useToast();
   const { refresh } = useRouter();
+  const token = getToken();
 
   async function handleDeleteSheet() {
     toast({
@@ -45,6 +47,9 @@ export default function TrashSheet({
           id: sheetId,
           pdfName,
           mp3Name,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       });
 

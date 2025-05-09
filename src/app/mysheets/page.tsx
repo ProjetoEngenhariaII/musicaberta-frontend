@@ -1,21 +1,32 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import { api } from "@/lib/axios";
 import { Sheet } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { SheetCard } from "@/components/SheetCard";
 import TrashSheet from "@/components/TrashSheet";
+import { cookies } from "next/headers";
+import { ResponseUser } from "@/components/Header";
 
 export default async function MySheets() {
-  const session = await getServerSession(authOptions);
+  const token = cookies().get("token");
 
-  if (!session) {
-    redirect("/api/auth/signin");
+  if (!token) {
+    redirect("/login");
   }
 
-  const userId = session.user.id;
-  const res = await api.get(`/sheets/user/${userId}`);
+  const resUser = await api.get("/users/me", {
+    headers: {
+      Authorization: `Bearer ${token.value}`,
+    },
+  });
+
+  const { user } = resUser.data as ResponseUser;
+
+  const res = await api.get(`/sheets/user/${user.id}`, {
+    headers: {
+      Authorization: `Bearer ${token.value}`,
+    },
+  });
 
   const sheets: Sheet[] = res.data.sheets;
 
@@ -39,9 +50,9 @@ export default async function MySheets() {
                 songWriter={songWriter}
                 title={title}
                 user={{
-                  id: userId,
-                  name: session.user.name ?? "",
-                  avatarUrl: session.user.image ?? "",
+                  id: user.id,
+                  name: user.name ?? "",
+                  avatarUrl: user.avatarUrl ?? "",
                 }}
               >
                 <TrashSheet

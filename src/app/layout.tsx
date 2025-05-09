@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import SessionWrapper from "@/components/SessionWrapper";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Toaster } from "@/components/ui/toaster";
@@ -22,14 +21,12 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body className={cn("font-sans antialiased", inter.className)}>
-        <SessionWrapper>
-          <div className="min-h-screen flex flex-col">
-            <Header />
-            <main className="flex-grow">{children}</main>
-            <Footer />
-          </div>
-          <Toaster />
-        </SessionWrapper>
+        <div className="min-h-screen flex flex-col">
+          <Header />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+        </div>
+        <Toaster />
       </body>
     </html>
   );

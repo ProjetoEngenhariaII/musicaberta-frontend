@@ -14,6 +14,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { api } from "@/lib/axios";
 import { cn } from "@/lib/utils";
+import { getToken } from "@/utils/getTokenFromCookie";
 import { Star } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -34,6 +35,7 @@ export default function StarSheet({
 }: StarSheetProps) {
   const { toast } = useToast();
   const { refresh } = useRouter();
+  const token = getToken();
 
   async function handleRemoveStar() {
     toast({
@@ -45,6 +47,9 @@ export default function StarSheet({
       await api.delete("favorites", {
         params: {
           id: favoriteId,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -73,10 +78,18 @@ export default function StarSheet({
     });
 
     try {
-      await api.post("favorites", {
-        userId,
-        sheetId,
-      });
+      await api.post(
+        "favorites",
+        {
+          userId,
+          sheetId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       toast({
         title: "Partitura favoritada!",

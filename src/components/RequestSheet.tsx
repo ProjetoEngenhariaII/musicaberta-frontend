@@ -17,6 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/axios";
 import { useState } from "react";
+import { getToken } from "@/utils/getTokenFromCookie";
 
 interface RequestSheetProps {
   userId: string;
@@ -29,6 +30,7 @@ export default function RequestSheet({ userId }: RequestSheetProps) {
   const [description, setDescription] = useState("");
   const [badges, setBadges] = useState("");
   const [open, setOpen] = useState(false);
+  const token = getToken();
 
   async function handleRequestSheet() {
     if (title.trim() === "") {
@@ -41,12 +43,20 @@ export default function RequestSheet({ userId }: RequestSheetProps) {
       className: "text-slate-50 bg-amber-600",
     });
     try {
-      await api.post("requests", {
-        title,
-        description,
-        badges,
-        userId,
-      });
+      await api.post(
+        "requests",
+        {
+          title,
+          description,
+          badges,
+          userId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       toast({
         title: "Solicitação enviada!",

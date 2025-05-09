@@ -1,6 +1,3 @@
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
-import { authOptions } from "./api/auth/[...nextauth]/route";
 import { api } from "@/lib/axios";
 import { FavoritesResponseBody, SheetsResponseBody } from "@/lib/types";
 import SearchInput from "@/components/SearchInput";
@@ -9,20 +6,34 @@ import { Pagination } from "@/components/Pagination";
 import { SheetCard } from "@/components/SheetCard";
 import StarSheet from "@/components/StarSheet";
 import { cn } from "@/lib/utils";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { ResponseUser } from "@/components/Header";
 
 type HomeProps = {
   searchParams: { search?: string; sort?: string; page?: number };
 };
 
 export default async function Home({ searchParams }: HomeProps) {
-  const session = await getServerSession(authOptions);
+  const token = cookies().get("token");
 
-  if (!session) {
-    redirect("/api/auth/signin");
+  if (!token) {
+    redirect("/login");
   }
+
+  const resUser = await api.get("/users/me", {
+    headers: {
+      Authorization: `Bearer ${token?.value}`,
+    },
+  });
+
+  const { user } = resUser.data as ResponseUser;
 
   const { data, meta }: SheetsResponseBody = (
     await api.get(`/sheets`, {
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+      },
       params: {
         search: searchParams.search,
         sort: searchParams.sort,
@@ -32,8 +43,11 @@ export default async function Home({ searchParams }: HomeProps) {
   ).data;
 
   const res = await api.get(`/favorites`, {
+    headers: {
+      Authorization: `Bearer ${token.value}`,
+    },
     params: {
-      userId: session?.user.id,
+      userId: user.id,
     },
   });
 
@@ -82,7 +96,7 @@ export default async function Home({ searchParams }: HomeProps) {
                   }}
                 >
                   <StarSheet
-                    userId={session.user.id}
+                    userId={user.id}
                     sheetId={id}
                     favoriteId={isFavorited?.favoriteId}
                     sheetTitle={title}

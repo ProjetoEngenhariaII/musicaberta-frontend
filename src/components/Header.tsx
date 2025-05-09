@@ -7,21 +7,58 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
+import { cookies } from "next/headers";
 import Link from "next/link";
-import SignOutButton from "./SignOutButton";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getServerSession } from "next-auth";
+import { LogoutButton } from "./LogoutButton";
+import { api } from "@/lib/axios";
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  createdAt: string;
+  bio: string;
+  roles: string[];
+  instruments: string[];
+  avatarUrl: string;
+}
+
+export interface ResponseUser {
+  user: User;
+}
 
 export default async function Header() {
-  const session = await getServerSession(authOptions);
+  const token = cookies().get("token");
 
-  if (!session) {
-    return null;
+  if (!token) {
+    return (
+      <header className="flex justify-between items-center w-full max-w-screen-xl p-3 mx-auto sticky top-0 z-50 border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <Link href="/" className="flex justify-center items-center gap-2 ">
+          <Avatar>
+            <AvatarImage
+              className="size-12 rounded-full"
+              src="musicaberta-logo.png"
+              alt="musicaberta"
+            />
+          </Avatar>
+          <h1 className="hidden min-[500px]:block text-2xl text-slate-950 font-semibold">
+            Músicaberta
+          </h1>
+        </Link>
+      </header>
+    );
   }
 
-  const name = session.user.name || "MM";
+  const res = await api.get("/users/me", {
+    headers: {
+      Authorization: `Bearer ${token?.value}`,
+    },
+  });
 
-  const avatarFallbackText = `${name[0]}${name[1]}`.toUpperCase();
+  const { user } = res.data as ResponseUser;
+
+  const avatarFallbackText = `${user.name[0]}${user.name[1]}`.toUpperCase();
 
   return (
     <header className="flex justify-between items-center w-full max-w-screen-xl p-3 mx-auto sticky top-0 z-50 border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -43,18 +80,16 @@ export default async function Header() {
           <Avatar className="cursor-pointer">
             <AvatarImage
               className="size-10 rounded-full"
-              src={session?.user?.image || ""}
-              alt={session?.user?.name || ""}
+              src={user.avatarUrl || ""}
+              alt={user.name || ""}
             />
             <AvatarFallback>{avatarFallbackText}</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="mr-2">
           <DropdownMenuLabel>
-            <p>{session?.user?.name}</p>
-            <p className="text-slate-600 font-extralight">
-              {session?.user?.email}
-            </p>
+            <p>{user.name}</p>
+            <p className="text-slate-600 font-extralight">{user.email}</p>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
@@ -84,7 +119,7 @@ export default async function Header() {
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <SignOutButton />
+            <LogoutButton />
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
