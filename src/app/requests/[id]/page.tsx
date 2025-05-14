@@ -66,7 +66,7 @@ export default async function RequestDetails({
   const { favorites }: FavoritesResponseBody = resFavorites.data;
 
   return (
-    <div className="py-8 px-4 flex flex-col justify-center items-start max-w-screen-xl mx-auto gap-5">
+    <div className="py-8 px-4 flex flex-col justify-center items-start max-w-screen-lg mx-auto gap-5">
       <Link href="/requests" className="">
         <Button variant={"ghost"} className="flex items-center gap-2 px-0">
           <ArrowLeft />
@@ -112,7 +112,7 @@ export default async function RequestDetails({
           Contribuições ({request._count.Sheet})
         </h1>
 
-        <div className="grid w-full max-w-screen-xl grid-cols-2 gap-8">
+        <div className="grid w-full max-w-screen-lg grid-cols-2 gap-8">
           {sheets.map((sheet) => {
             const { id, badges, createdAt, mp3Url, pdfUrl, songWriter, title } =
               sheet;

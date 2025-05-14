@@ -59,7 +59,7 @@ export default async function Home({ searchParams }: HomeProps) {
         Partituras encontradas: {meta.total}
       </h1>
 
-      <div className="flex flex-col justify-center items-center gap-8">
+      <div className="w-full max-w-screen-lg mx-auto flex flex-col justify-center items-center gap-8">
         <div className="flex gap-2">
           <SearchInput />
           <FilterDropDown />
