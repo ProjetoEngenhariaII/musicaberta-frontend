@@ -40,7 +40,7 @@ export default async function RequestsPage() {
         </div>
       </div>
 
-      <div className="w-full max-w-screen-xl grid grid-cols-2 gap-8">
+      <div className="w-full max-w-screen-lg grid grid-cols-2 gap-8">
         {requests.map((req) => (
           <RequestCard
             id={req.id}

@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import { api } from "@/lib/axios";
 import { FavoritesResponseBody } from "@/lib/types";
-import { cn } from "@/lib/utils";
 import { SheetCard } from "@/components/SheetCard";
 import StarSheet from "@/components/StarSheet";
 import { ResponseUser } from "@/components/Header";
@@ -34,14 +33,9 @@ export default async function Favorites() {
   const { favorites }: FavoritesResponseBody = res.data;
 
   return (
-    <div className="flex flex-col justify-center items-center gap-12 py-8 px-4">
+    <div className="w-full max-w-screen-lg mx-auto flex flex-col justify-center items-center gap-12 py-8 px-4">
       <h1 className="text-3xl font-bold">Meus favoritos</h1>
-      <div
-        className={cn("grid grid-cols-1 gap-6", {
-          "md:grid-cols-2": favorites.length > 1,
-          "md:grid-cols-1": !(favorites.length > 1),
-        })}
-      >
+      <div className="w-full grid grid-cols-2 gap-8">
         {favorites.map((favorite) => {
           const { favoriteId, sheet } = favorite;
           const { id, createdAt, songWriter, title, badges, mp3Url, pdfUrl } =
