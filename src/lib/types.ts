@@ -6,7 +6,7 @@ export type Sheet = {
   songWriter: string;
   pdfUrl: string;
   mp3Url: string;
-  badges: string[];
+  badges: string;
   userId: string;
   user: {
     name: string;

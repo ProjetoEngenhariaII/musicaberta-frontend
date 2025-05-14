@@ -1,11 +1,10 @@
 "use client";
 
-import { Dispatch, FormEvent, SetStateAction, useState } from "react";
+import { FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { api } from "@/lib/axios";
-import { X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { getToken } from "@/utils/getTokenFromCookie";
@@ -18,8 +17,7 @@ interface NewSheetFormProps {
 export default function NewSheetForm({ userId, requestId }: NewSheetFormProps) {
   const [songWriter, setSongWriter] = useState("");
   const [title, setTitle] = useState("");
-  const [badges, setBadges] = useState<string[]>([]);
-  const [newBadge, setNewBadge] = useState("");
+  const [badges, setBadges] = useState("");
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [mp3File, setMp3File] = useState<File | null>(null);
   const { toast } = useToast();
@@ -105,32 +103,13 @@ export default function NewSheetForm({ userId, requestId }: NewSheetFormProps) {
 
     setSongWriter("");
     setTitle("");
-    setBadges([]);
-    setNewBadge("");
+    setBadges("");
     setPdfFile(null);
     setMp3File(null);
   };
 
-  const addItem = (
-    item: string,
-    list: string[],
-    setList: Dispatch<SetStateAction<string[]>>
-  ) => {
-    if (item.trim() && !list.includes(item)) {
-      setList([...list, item]);
-    }
-  };
-
-  const removeItem = (
-    item: string,
-    list: string[],
-    setList: Dispatch<SetStateAction<string[]>>
-  ) => {
-    setList(list.filter((i) => i !== item));
-  };
-
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto space-y-6">
       <div className="space-y-2">
         <Label htmlFor="title">Título</Label>
         <Input
@@ -179,43 +158,14 @@ export default function NewSheetForm({ userId, requestId }: NewSheetFormProps) {
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="roles">Badges</Label>
-        <div className="flex flex-wrap gap-2 mb-2">
-          {badges.map((badge) => (
-            <span
-              key={badge}
-              className="bg-primary text-primary-foreground px-2 py-1 rounded-full text-sm flex items-center"
-            >
-              {badge}
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="ml-1 h-4 w-4 p-0"
-                onClick={() => removeItem(badge, badges, setBadges)}
-              >
-                <X className="h-3 w-3" />
-              </Button>
-            </span>
-          ))}
-        </div>
-        <div className="flex gap-2">
-          <Input
-            id="newBadge"
-            value={newBadge}
-            onChange={(e) => setNewBadge(e.target.value)}
-            placeholder="Adicionar uma nova badge.."
-          />
-          <Button
-            type="button"
-            onClick={() => {
-              addItem(newBadge, badges, setBadges);
-              setNewBadge("");
-            }}
-          >
-            Nova badge
-          </Button>
-        </div>
+        <Label htmlFor="badges">Badges (separadas por vírgula)</Label>
+        <Input
+          required
+          id="badges"
+          value={badges}
+          onChange={(e) => setBadges(e.target.value)}
+          placeholder="Ex: dobrado, rock, pop..."
+        />
       </div>
       <Button
         disabled={

@@ -26,7 +26,7 @@ export default async function NewSheet({ searchParams }: NewSheetProps) {
   const { id } = searchParams;
 
   return (
-    <div className="flex flex-col justify-center items-center gap-12 py-8 px-4">
+    <div className="max-w-screen-xl flex flex-col justify-center items-center gap-12 py-8 px-4">
       <h1 className="text-3xl font-bold">Upload de partitura</h1>
 
       <NewSheetForm userId={user.id} requestId={id} />
