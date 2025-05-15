@@ -14,7 +14,11 @@ import { useState } from "react";
 import { Filter } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-export function FilterDropDown() {
+interface FilterDropDownProps {
+  filterOptions: { value: string; label: string }[];
+}
+
+export function FilterDropDown({ filterOptions }: FilterDropDownProps) {
   const [filter, setFilter] = useState("desc");
 
   const searchParams = useSearchParams();
@@ -39,25 +43,23 @@ export function FilterDropDown() {
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="flex gap-1 text-slate-600">
           <Filter className="w-4 h-4" />
-          Filtros
+          Ordem
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>Filtrar por:</DropdownMenuLabel>
+        <DropdownMenuLabel>Ordenar por:</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuRadioGroup
           value={filter}
           onValueChange={handleChangeFilter}
         >
-          <DropdownMenuRadioItem value="desc">
-            Mais recentes
-          </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="asc">
-            Mais antigos
-          </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="mostFavorited">
-            Mais favoritados
-          </DropdownMenuRadioItem>
+          {filterOptions.map((option) => {
+            return (
+              <DropdownMenuRadioItem key={option.value} value={option.value}>
+                {option.label}
+              </DropdownMenuRadioItem>
+            );
+          })}
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>

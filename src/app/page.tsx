@@ -62,7 +62,13 @@ export default async function Home({ searchParams }: HomeProps) {
       <div className="w-full max-w-screen-lg mx-auto flex flex-col justify-center items-center gap-8">
         <div className="flex gap-2">
           <SearchInput />
-          <FilterDropDown />
+          <FilterDropDown
+            filterOptions={[
+              { value: "desc", label: "Mais recentes" },
+              { value: "asc", label: "Mais antigas" },
+              { value: "mostFavorited", label: "Mais favoritados" },
+            ]}
+          />
         </div>
 
         <div

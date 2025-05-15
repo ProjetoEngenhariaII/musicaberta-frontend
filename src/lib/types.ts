@@ -44,6 +44,11 @@ export type SheetsResponseBody = {
   meta: MetaResponseBody;
 };
 
+export type RequestsResponseBody = {
+  data: Request[];
+  meta: MetaResponseBody;
+};
+
 export type FavoritesResponseBody = {
   favorites: {
     favoriteId: string;

@@ -29,7 +29,7 @@ export default function SearchInput() {
   );
 
   return (
-    <div className="relative">
+    <div className="relative w-96">
       <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
       <Input
         type="search"
